@@ -33,7 +33,7 @@ DEBUG = not IS_PYTHONANYWHERE
 if DEBUG:
     ALLOWED_HOST = []
 else:
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['www.easytribute.com']
 
 
 # Application definition
