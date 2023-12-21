@@ -1,0 +1,8 @@
+.env
+*.sqlite*
+
+.idea/
+__pycache__/
+node_modules/
+staticfiles/
+venv/

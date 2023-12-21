@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+{% if object %}
+    <h1 class="border-bottom pb-2 mb-5">Edit tribute</h1>
+{% else %}
+    <h1 class="border-bottom pb-2 mb-5">New tribute</h1>
+{% endif %}
+<form method="post">{% csrf_token %}
+    {{ form | crispy }}
+    <div class="col-12">
+        {% if object %}
+            <input type="submit" class="btn btn-dark" name="submit" value="Save changes">
+            <a class="btn btn-link" href="{% url 'tributes:detail' object.slug %}">Check your tribute</a>
+        {% else %}
+            <input type="submit" class="btn btn-dark" name="submit" value="Create">
+        {% endif %}
+    </div>
+</form>
+
+{% endblock %}

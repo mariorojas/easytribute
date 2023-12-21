@@ -1,0 +1,9 @@
+{% load comments %}
+{% load crispy_forms_tags %}
+
+<form action="{% comment_form_target %}" method="post">{% csrf_token %}
+    {{ form | crispy }}
+    <div class="col-12">
+        <input type="submit" class="btn btn-dark" name="preview" value="Preview comment">
+    </div>
+</form>

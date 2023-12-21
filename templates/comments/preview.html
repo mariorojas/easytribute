@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load comments %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form action="{% comment_form_target %}" method="post">{% csrf_token %}
+    {% if not form.erros%}
+        <div id="comment-preview">
+            <h1 class="border-bottom pb-2 mb-5">Preview your comment</h1>
+            <p>Here's what your comment will look like; if you're happy with it, go ahead and post, or feel free to edit and preview again.</p>
+            <article id="comment-{{ comment.pk }}" class="border rounded bg-secondary-subtle row mb-4 p-3">
+                <div class="col-1">
+                    <span class="h3">🕊️</span>
+                </div>
+                <div class="col">
+                    {{ comment | linebreaks }}
+                    <p class="text-secondary mt-n3 mb-0">
+                        <small>{{ form.name.value }}</small>
+                    </p>
+                </div>
+            </article>
+        </div>
+    {% endif %}
+    {{ form | crispy }}
+    <div class="col-12">
+        <input type="submit" class="btn btn-dark" name="preview" value="Preview comment">
+        <input type="submit" class="btn btn-dark" name="submit" value="Post comment">
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load comments %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{ object.name }} Memorial{% endblock %}
+
+{% block content %}
+
+<main>
+    <div id="profile" class="py-3 text-center">
+        {% with 'mj stevejobs' as slugs %}
+            {% if object.slug in slugs %}
+                <img class="thumbnail img-thumbnail rounded-circle d-block mx-auto mb-4" src="{% static 'img/' %}{{ object.slug }}{{ '.png' }}">
+            {% else %}
+                <img class="thumbnail img-thumbnail rounded-circle d-block mx-auto mb-4" src="{% static 'img/profile.png' %}">
+            {% endif %}
+        {% endwith %}
+        <h1 class="h2">{{ object.name }}</h1>
+        <p class="text-secondary pb-3">
+            <small>{{ object.birth_year }} - {{ object.death_year }}</small>
+        </p>
+        <p>{{ object.description }}</p>
+    </div>
+</main>
+<div class="profile-comments">
+    <h2 class="border-bottom pb-2 mt-5 h3 text-center">Comments</h2>
+    {% render_comment_list for object %}
+    <h3 class="border-bottom pb-2 mt-5 h4">Send your comment</h3>
+    {% render_comment_form for object %}
+</div>
+{% endblock %}

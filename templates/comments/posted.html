@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="border-bottom pb-2 my-5">Thank you for your comment</h1>
+<p>Go and check your comment <a href="{{ comment.content_object.get_absolute_url }}#c{{ comment.id }}">here</a></p>
+
+{% endblock %}

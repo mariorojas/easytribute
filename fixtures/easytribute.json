@@ -1,0 +1,30 @@
+[
+  {
+    "model": "tributes.tribute",
+    "pk": 1,
+    "fields": {
+      "slug": "mj",
+      "name": "Michael Jackson",
+      "description": "An iconic and influential artist, whose extraordinary talent and dedication to music transformed the entertainment landscape, left an indelible mark on the world with his unique sound, style, and humanitarian efforts.",
+      "birth_year": "1958",
+      "death_year": "2009",
+      "created_at": "2023-10-17 19:30:00.0+00:00",
+      "updated_at": "2023-10-17 19:30:00.0+00:00",
+      "owner": "admin"
+    }
+  },
+  {
+    "model": "tributes.tribute",
+    "pk": 2,
+    "fields": {
+      "slug": "stevejobs",
+      "name": "Steve Jobs",
+      "description": "The visionary co-founder of Apple Inc. and a pioneer in the technology industry, profoundly changed the way we interact with technology. His innovative spirit and profound impact on computer, music, and mobile industries continue to inspire generations.",
+      "birth_year": "1955",
+      "death_year": "2011",
+      "created_at": "2023-10-17 19:30:00.0+00:00",
+      "updated_at": "2023-10-17 19:30:00.0+00:00",
+      "owner": "admin"
+    }
+  }
+]

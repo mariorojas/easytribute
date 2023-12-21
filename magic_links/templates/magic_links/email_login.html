@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Sign In{% endblock%}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <p>You are already logged in as {{ request.user.email }}.</p>
+    <form method="post" action="{% url 'magic_links:logout' %}">
+        {% csrf_token %}
+        <div class="col-12">
+            <input class="btn btn-dark" type="submit" value="Log out">
+        </div>
+    </form>
+{% else %}
+    <h1 class="border-bottom pb-2 my-5">Sign In</h1>
+    <form action="{{ request.path }}" method="post">
+        {{ form | crispy }}
+        {% csrf_token %}
+        <div class="col-12">
+            <input class="btn btn-dark" type="submit" value="Send log in link">
+        </div>
+    </form>
+{% endif %}
+
+{% endblock %}
