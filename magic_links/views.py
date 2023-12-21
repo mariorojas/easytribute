@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.urls import reverse
@@ -35,7 +36,8 @@ class EmailLoginView(FormView):
         link = self.request.build_absolute_uri(link)
         link += get_query_string(user)
 
-        user.email_user(subject='[django-sesame] Login to our app',
-                        message=message.format(link))
+        user.email_user(subject='Sign In to EasyTribute',
+                        message=message.format(link),
+                        from_email=settings.EMAIL_HOST_USER)
 
         return render(self.request, 'magic_links/email_login_success.html')
