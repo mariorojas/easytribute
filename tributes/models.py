@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django_comments.moderation import CommentModerator, moderator
 
 
 class TributeManager(models.Manager):
@@ -16,6 +17,7 @@ class Tribute(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.CharField(max_length=255, blank=True, null=True)
+    enable_comments = models.BooleanField(default=True)
 
     objects = TributeManager()
 
@@ -24,3 +26,11 @@ class Tribute(models.Model):
 
     def get_absolute_url(self):
         return reverse('tributes:detail', kwargs={'slug': self.slug})
+
+
+class TributeModerator(CommentModerator):
+    email_notification = False
+    enable_field = 'enable_comments'
+
+
+moderator.register(Tribute, TributeModerator)

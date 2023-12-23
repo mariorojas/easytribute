@@ -38,6 +38,14 @@ class TributeDetailView(DetailView):
     def get_queryset(self):
         return Tribute.objects.filter(active=True)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            username = user.username
+            context.update({'is_owner_authenticated': username == self.object.owner})
+        return context
+
 
 class TributeHomeView(TemplateView):
     template_name = 'tributes/tribute_home.html'
