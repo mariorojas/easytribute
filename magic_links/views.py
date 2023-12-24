@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import FormView
@@ -31,6 +32,13 @@ class EmailLoginView(FormView):
             raw_password = 'hello'
             user = user_model.objects.create_user(username=email, email=email,
                                                   password=raw_password)
+
+            # enable comments moderation by tribute owner
+            permission = Permission.objects.get_by_natural_key(
+                codename='can_moderate',
+                app_label='django_comments',
+                model='comment')
+            user.user_permissions.add(permission)
 
         link = reverse('magic_links:auth')
         link = self.request.build_absolute_uri(link)
