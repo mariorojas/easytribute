@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
@@ -29,7 +31,7 @@ class EmailLoginView(FormView):
         try:
             user = user_model.objects.get(username=email)
         except user_model.DoesNotExist:
-            raw_password = 'hello'
+            raw_password = str(uuid.uuid4())
             user = user_model.objects.create_user(username=email, email=email,
                                                   password=raw_password)
 
