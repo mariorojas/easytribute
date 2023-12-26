@@ -64,8 +64,7 @@ class TributeHomeView(TemplateView):
     template_name = 'tributes/tribute_home.html'
 
     def dispatch(self, request, *args, **kwargs):
-        queryset = Tribute.objects.filter(owner=self.request.user)
-        if queryset.exists():
+        if self.request.user.is_authenticated:
             return redirect('tributes:dashboard')
         return super().dispatch(request, *args, **kwargs)
 
