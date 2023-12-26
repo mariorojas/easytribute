@@ -25,10 +25,9 @@ class TributeCreateView(TributeLoginRequireMixin, CreateView):
         return redirect(self.object.get_absolute_url())
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            tribute_from_db = Tribute.objects.filter(owner=self.request.user)
-            if tribute_from_db.exists():
-                return redirect('tributes:edit')
+        tribute_from_db = Tribute.objects.filter(owner=self.request.user)
+        if tribute_from_db.exists():
+            return redirect('tributes:edit')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -51,15 +50,24 @@ class TributeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # enable comment moderation for owner
         user = self.request.user
         if user.is_authenticated:
             username = user.username
             context.update({'is_owner_authenticated': username == self.object.owner})
+
         return context
 
 
 class TributeHomeView(TemplateView):
     template_name = 'tributes/tribute_home.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        queryset = Tribute.objects.filter(owner=self.request.user)
+        if queryset.exists():
+            return redirect('tributes:dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class TributeUpdateView(TributeLoginRequireMixin, UpdateView):
