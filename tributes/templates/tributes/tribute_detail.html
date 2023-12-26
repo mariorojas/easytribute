@@ -10,7 +10,7 @@
 
 <main>
     <div id="profile" class="py-3 text-center">
-        {% with 'mj stevejobs' as slugs %}
+        {% with 'mj stevejobs kobe' as slugs %}
             {% if object.slug in slugs %}
                 <img class="thumbnail img-thumbnail rounded-circle d-block mx-auto mb-4" src="{% static 'img/' %}{{ object.slug }}{{ '.png' }}">
             {% else %}
