@@ -21,7 +21,7 @@
         <p class="text-secondary pb-3">
             <small>{{ object.birth_year }} - {{ object.death_year }}</small>
         </p>
-        <p>{{ object.description }}</p>
+        <p>{{ object.description | linebreaks }}</p>
     </div>
 </main>
 <div class="profile-comments">
