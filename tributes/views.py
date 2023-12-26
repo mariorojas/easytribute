@@ -69,6 +69,11 @@ class TributeHomeView(TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class TributeShareView(DetailView):
+    model = Tribute
+    template_name = 'tributes/tribute_share.html'
+
+
 class TributeUpdateView(TributeLoginRequireMixin, UpdateView):
     model = Tribute
     form_class = TributeForm

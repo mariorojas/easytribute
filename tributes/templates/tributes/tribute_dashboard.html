@@ -6,6 +6,7 @@
 {% if object %}
     <p><a href="{% url 'tributes:edit' %}">Edit your tribute</a></p>
     <p><a href="{% url 'tributes:detail' object.slug %}">Check your tribute</a></p>
+    <p><a href="{% url 'tributes:share' object.slug %}">Share your tribute</a></p>
 {% else %}
     <p><a href="{% url 'tributes:new' %}">New tribute</a></p>
 {% endif %}
