@@ -1,9 +1,9 @@
 import random
 import string
 
+from django import forms
 from django.apps import apps
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
 from django.utils.translation import gettext as _
 
 from .models import Tribute
@@ -15,7 +15,12 @@ user_email = 'support@easytribute.com'
 user_name = 'EasyTribute team'
 
 
-class TributeForm(ModelForm):
+class TributeForm(forms.ModelForm):
+    slug = forms.SlugField(
+        help_text='This value is used to determine your URL. '
+                  'For example, if you set your slug to "john-doe", '
+                  'your URL will be "https://www.easytribute.com/john-doe".')
+
     class Meta:
         model = Tribute
         fields = ['name', 'description', 'birth_year', 'death_year', 'slug']
