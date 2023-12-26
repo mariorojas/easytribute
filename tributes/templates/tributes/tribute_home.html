@@ -4,6 +4,11 @@
 
 <h1 class="border-bottom pb-2 mb-5">EasyTribute</h1>
 <p>The easiest way to create a tribute page for your beloved.</p>
+<p>Here are some examples</p>
+<ul>
+    <li><a href="{% url 'tributes:detail' 'mj' %}">Michael Jackson</a></li>
+    <li><a href="{% url 'tributes:detail' 'stevejobs' %}">Steve Jobs</a></li>
+</ul>
 <p><a href="{% url 'tributes:new' %}">Start here!</a></p>
 
 {% endblock%}

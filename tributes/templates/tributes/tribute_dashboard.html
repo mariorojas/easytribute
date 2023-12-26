@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="border-bottom pb-2 mb-5">Dashboard</h1>
+{% if object %}
+    <p><a href="{% url 'tributes:edit' %}">Edit your tribute</a></p>
+    <p><a href="{% url 'tributes:detail' object.slug %}">Check your tribute</a></p>
+{% else %}
+    <p><a href="{% url 'tributes:new' %}">New tribute</a></p>
+{% endif %}
+
+{% endblock %}

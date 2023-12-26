@@ -35,36 +35,27 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'tributes:new' %}">New tribute</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'tributes:edit' %}">Edit tribute</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Examples
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'tributes:detail' 'mj' %}">Michael Jackson</a></li>
-                        <li><a class="dropdown-item" href="{% url 'tributes:detail' 'stevejobs' %}">Steve Jobs</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Accounts
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'magic_links:login' %}">Sign In</a></li>
-                        <li>
-                            <form method="post" action="{% url 'magic_links:logout' %}">
-                                {% csrf_token %}
-                                <input class="dropdown-item" type="submit" value="Sign out">
-                            </form>
-                        </li>
-                    </ul>
-                </li>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'tributes:dashboard' %}">Dashboard</a></li>
+                            <li>
+                                <form method="post" action="{% url 'magic_links:logout' %}">
+                                    {% csrf_token %}
+                                    <input class="dropdown-item" type="submit" value="Sign out">
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'magic_links:login' %}">Sign In</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

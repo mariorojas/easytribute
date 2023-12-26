@@ -32,6 +32,17 @@ class TributeCreateView(TributeLoginRequireMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class TributeDashboardView(TemplateView):
+    template_name = 'tributes/tribute_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = Tribute.objects.filter(owner=self.request.user)
+        if queryset.exists():
+            context.update({'object': queryset.get()})
+        return context
+
+
 class TributeDetailView(DetailView):
     model = Tribute
 

@@ -14,7 +14,6 @@
     <div class="col-12">
         {% if object %}
             <input type="submit" class="btn btn-dark" name="submit" value="Save changes">
-            <a class="btn btn-link" href="{% url 'tributes:detail' object.slug %}">Check your tribute</a>
         {% else %}
             <input type="submit" class="btn btn-dark" name="submit" value="Create">
         {% endif %}
