@@ -59,7 +59,9 @@ class NewTributeForm(forms.ModelForm):
                 continue
 
             self.instance.slug = slug
-            self.instance.owner = user
+
+            if user.is_authenticated:
+                self.instance.owner = user
 
             create_slug = False
 

@@ -7,6 +7,19 @@ from .forms import NewTributeForm, TributeForm
 from .models import Tribute
 
 
+class TributeCreateAnonymousView(CreateView):
+    model = Tribute
+    form_class = NewTributeForm
+    object = None
+
+    def form_valid(self, form):
+        site = get_current_site(self.request)
+        ip_address = self.request.META.get('REMOTE_ADDR', None)
+        self.object = form.save_with_comments(
+            user=self.request.user, site_id=site.id, ip_address=ip_address)
+        return redirect(self.object.get_absolute_url())
+
+
 class TributeCreateView(LoginRequiredMixin, CreateView):
     model = Tribute
     form_class = NewTributeForm
