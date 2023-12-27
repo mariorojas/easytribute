@@ -58,9 +58,7 @@ class TributeDetailView(DetailView):
 
         # enable comment moderation for owner
         user = self.request.user
-        if user.is_authenticated:
-            username = user.username
-            context.update({'is_owner_authenticated': username == self.object.owner})
+        context.update({'is_owner_authenticated': user.username == self.object.owner})
 
         return context
 
