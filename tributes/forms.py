@@ -25,9 +25,26 @@ class TributeForm(forms.ModelForm):
         model = Tribute
         fields = ['name', 'description', 'birth_year', 'death_year', 'slug']
 
+    def clean_death_year(self):
+        birth_year = self.cleaned_data.get('birth_year')
+        death_year = self.cleaned_data.get('death_year')
+        if birth_year and birth_year > death_year:
+            raise ValidationError(
+                _('The death year cannot be lower than the birth year'))
+        return death_year
 
-class NewTributeForm(TributeForm):
-    class Meta(TributeForm.Meta):
+    def clean_slug(self):
+        slug = self.cleaned_data.get('slug')
+        if slug in restricted_slugs:
+            raise ValidationError(
+                _('The slug %(value)s is not allowed'),
+                params={'value': slug})
+        return slug
+
+
+class NewTributeForm(forms.ModelForm):
+    class Meta:
+        model = Tribute
         fields = ['name', 'description', 'birth_year', 'death_year']
 
     def save_with_comments(self, user, site_id, ip_address):
