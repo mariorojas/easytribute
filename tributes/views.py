@@ -7,12 +7,7 @@ from .forms import NewTributeForm, TributeForm
 from .models import Tribute
 
 
-class TributeLoginRequireMixin(LoginRequiredMixin):
-    def get_redirect_field_name(self):
-        return None
-
-
-class TributeCreateView(TributeLoginRequireMixin, CreateView):
+class TributeCreateView(LoginRequiredMixin, CreateView):
     model = Tribute
     form_class = NewTributeForm
     object = None
@@ -24,27 +19,37 @@ class TributeCreateView(TributeLoginRequireMixin, CreateView):
             user=self.request.user, site_id=site.id, ip_address=ip_address)
         return redirect(self.object.get_absolute_url())
 
-    def dispatch(self, request, *args, **kwargs):
-        tribute_from_db = Tribute.objects.filter(owner=self.request.user)
-        if tribute_from_db.exists():
+    def get(self, request, *args, **kwargs):
+        if self.has_tribute():
             return redirect('tributes:edit')
-        return super().dispatch(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if self.has_tribute():
+            return redirect('tributes:edit')
+        return super().post(request, *args, **kwargs)
+
+    def get_redirect_field_name(self):
+        return None
+
+    def has_tribute(self):
+        return Tribute.objects.filter(owner=self.request.user).exists()
 
 
-class TributeDashboardView(TemplateView):
+class TributeDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'tributes/tribute_dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = Tribute.objects.filter(owner=self.request.user)
-        if queryset.exists():
-            context.update({'object': queryset.get()})
+        _object = Tribute.objects.filter(owner=self.request.user).first()
+        context.update({'object': _object})
         return context
+
+    def get_redirect_field_name(self):
+        return None
 
 
 class TributeDetailView(DetailView):
-    model = Tribute
-
     def get_queryset(self):
         return Tribute.objects.filter(active=True)
 
@@ -63,20 +68,27 @@ class TributeDetailView(DetailView):
 class TributeHomeView(TemplateView):
     template_name = 'tributes/tribute_home.html'
 
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect('tributes:dashboard')
-        return super().dispatch(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
-class TributeShareView(DetailView):
-    model = Tribute
+class TributeShareView(LoginRequiredMixin, DetailView):
     template_name = 'tributes/tribute_share.html'
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(Tribute, owner=self.request.user)
 
-class TributeUpdateView(TributeLoginRequireMixin, UpdateView):
-    model = Tribute
+    def get_redirect_field_name(self):
+        return None
+
+
+class TributeUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TributeForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(Tribute, owner=self.request.user)
+
+    def get_redirect_field_name(self):
+        return None
