@@ -27,13 +27,6 @@
 <div class="profile-comments">
     <h2 class="border-bottom pb-2 mt-5 h3 text-center">Comments</h2>
     {% render_comment_list for object %}
-    <div  class="mt-5">&nbsp;</div>
-    <div  class="mt-5">&nbsp;</div>
-    {% if not is_owner_authenticated %}
-        <h3 class="border-bottom pb-2 mt-5 h5">Send your comment</h3>
-        {% render_comment_form for object %}
-    {% else %}
-        <p class="text-center text-secondary"><em>The owner is not allowed to comment on their own tribute.</em></p>
-    {% endif %}
+    <p class="text-center fst-italic text-secondary">New comments are disabled, sorry for the inconvenience.</p>
 </div>
 {% endblock %}
