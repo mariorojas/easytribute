@@ -162,6 +162,10 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# easytribute
+
+BASE_SITE_URL = 'https://www.easytribute.com/'
+
 # django-comments
 
 SITE_ID = 1

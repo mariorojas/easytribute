@@ -10,14 +10,7 @@
     <h1 class="border-bottom pb-2 mb-5">New tribute</h1>
 {% endif %}
 <form method="post">{% csrf_token %}
-    {{ form | crispy }}
-    <div class="col-12">
-        {% if object %}
-            <input type="submit" class="btn btn-dark" name="submit" value="Save changes">
-        {% else %}
-            <input type="submit" class="btn btn-dark" name="submit" value="Create">
-        {% endif %}
-    </div>
+    {% crispy form %}
 </form>
 
 {% endblock %}

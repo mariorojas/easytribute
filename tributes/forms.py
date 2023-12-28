@@ -1,8 +1,12 @@
 import random
 import string
 
+from crispy_forms.bootstrap import PrependedText
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Layout, Submit
 from django import forms
 from django.apps import apps
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django_recaptcha.fields import ReCaptchaField
@@ -17,14 +21,20 @@ user_name = 'EasyTribute team'
 
 
 class TributeForm(forms.ModelForm):
-    slug = forms.SlugField(
-        help_text='This value is used to determine your URL. '
-                  'For example, if you set your slug to "john-doe", '
-                  'your URL will be "https://www.easytribute.com/john-doe".')
+    slug = forms.SlugField(label='URL')
 
     class Meta:
         model = Tribute
         fields = ['name', 'description', 'birth_year', 'death_year', 'slug']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div('name', 'description', 'birth_year', 'death_year',
+                PrependedText('slug', settings.BASE_SITE_URL)),
+            Submit('submit', _('Save changes'), css_class='btn btn-dark'),
+        )
 
     def clean_death_year(self):
         birth_year = self.cleaned_data.get('birth_year')
@@ -38,7 +48,7 @@ class TributeForm(forms.ModelForm):
         slug = self.cleaned_data.get('slug')
         if slug in restricted_slugs:
             raise ValidationError(
-                _('The slug %(value)s is not allowed'),
+                _('%(value)s is not allowed'),
                 params={'value': slug})
         return slug
 
@@ -48,6 +58,14 @@ class NewTributeForm(forms.ModelForm):
         model = Tribute
         fields = ['name', 'description', 'birth_year', 'death_year']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div('name', 'description', 'birth_year', 'death_year'),
+            Submit('submit', _('Create'), css_class='btn btn-dark'),
+        )
+
     def save_with_comments(self, user, site_id, ip_address):
         create_slug = True
         while create_slug:
@@ -86,14 +104,6 @@ class NewTributeForm(forms.ModelForm):
             raise ValidationError(
                 _('The death year cannot be lower than the birth year'))
         return death_year
-
-    def clean_slug(self):
-        slug = self.cleaned_data.get('slug')
-        if slug in restricted_slugs:
-            raise ValidationError(
-                _('The slug %(value)s is not allowed'),
-                params={'value': slug})
-        return slug
 
 
 class AnonymousTributeForm(forms.ModelForm):
@@ -103,6 +113,14 @@ class AnonymousTributeForm(forms.ModelForm):
         model = Tribute
         fields = ['name', 'description', 'birth_year', 'death_year']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div('name', 'description', 'birth_year', 'death_year', 'captcha'),
+            Submit('submit', _('Create'), css_class='btn btn-dark'),
+        )
+
     def save_with_comments(self, user, site_id, ip_address):
         create_slug = True
         while create_slug:
@@ -141,11 +159,3 @@ class AnonymousTributeForm(forms.ModelForm):
             raise ValidationError(
                 _('The death year cannot be lower than the birth year'))
         return death_year
-
-    def clean_slug(self):
-        slug = self.cleaned_data.get('slug')
-        if slug in restricted_slugs:
-            raise ValidationError(
-                _('The slug %(value)s is not allowed'),
-                params={'value': slug})
-        return slug
