@@ -2,7 +2,30 @@
 {% load crispy_forms_tags %}
 
 <form action="{% comment_form_target %}" method="post">{% csrf_token %}
-    {{ form | crispy }}
+    {{ form.content_type }}
+    {{ form.object_pk }}
+    {{ form.timestamp }}
+    {{ form.security_hash }}
+    <div id="div_id_name" class="mb-3">
+        <label for="id_name" class="form-label requiredField">Name<span class="asteriskField">*</span> </label>
+        <input type="text" name="name" maxlength="50" class="textinput form-control" required="" id="id_name">
+    </div>
+    <div id="div_id_email" class="mb-3">
+        <label for="id_email" class="form-label requiredField">Email address<span class="asteriskField">*</span></label>
+        <input type="email" name="email" maxlength="320" class="emailinput form-control" required="" id="id_email">
+    </div>
+    <div id="div_id_url" class="mb-3">
+        <label for="id_url" class="form-label">URL</label>
+        <input type="url" name="url" class="urlinput form-control" id="id_url">
+    </div>
+    <div id="div_id_comment" class="mb-3">
+        <label for="id_comment" class="form-label requiredField">Comment<span class="asteriskField">*</span></label>
+        <textarea name="comment" cols="40" rows="10" maxlength="3000" class="textarea form-control" required="" id="id_comment"></textarea>
+    </div>
+    <div id="div_id_honeypot" class="mb-3">
+        <label for="id_honeypot" class="form-label">If you enter anything in this field your comment will be treated as spam</label>
+        <input type="text" name="honeypot" class="textinput form-control" id="id_honeypot">
+    </div>
     <div class="col-12">
         <input type="submit" class="btn btn-dark" name="preview" value="Preview comment">
     </div>
