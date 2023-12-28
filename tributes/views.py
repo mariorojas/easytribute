@@ -3,13 +3,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
-from .forms import NewTributeForm, TributeForm
+from .forms import AnonymousTributeForm, NewTributeForm, TributeForm
 from .models import Tribute
 
 
 class TributeCreateAnonymousView(CreateView):
     model = Tribute
-    form_class = NewTributeForm
+    form_class = AnonymousTributeForm
     object = None
 
     def form_valid(self, form):
