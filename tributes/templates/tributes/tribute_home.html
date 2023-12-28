@@ -10,6 +10,12 @@
     <li><a href="{% url 'tributes:detail' 'stevejobs' %}">Steve Jobs</a></li>
     <li><a href="{% url 'tributes:detail' 'kobe' %}">Kobe Bryant</a></li>
 </ul>
+<p>Take a look at the latest tributes created by our users:</p>
+<ul>
+    {% for el in latest %}
+        <li><a href="{% url 'tributes:detail' el.slug %}">{{ el.name }}</a></li>
+    {% endfor %}
+</ul>
 <p><a href="{% url 'tributes:new' %}">Create a tribute using your email</a></p>
 <p><a href="{% url 'tributes:new-as-anon' %}">Create a tribute anonymously</a> <small class="text-secondary">(It can only be managed by the Administrator)</small></p>
 <p><a href="https://github.com/mariorojas/easytribute">Check the source code here!</a></p>

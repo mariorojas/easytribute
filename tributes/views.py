@@ -84,6 +84,13 @@ class TributeHomeView(TemplateView):
             return redirect('tributes:dashboard')
         return super().get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'latest': Tribute.objects.order_by('-created_at')[:5]
+        })
+        return context
+
 
 class TributeShareView(LoginRequiredMixin, DetailView):
     template_name = 'tributes/tribute_share.html'
