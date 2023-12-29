@@ -97,6 +97,8 @@ class TributeDetailView(DetailView):
         user = self.request.user
         context.update({'is_owner_authenticated': user.username == self.object.owner})
 
+        context.update({'hide_navbar': Tribute})
+
         return context
 
 

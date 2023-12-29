@@ -37,7 +37,14 @@
     {% endif %}
 </div>
 <div id="tribute-options" class="mt-5">
-    <p><a href="{% url 'tributes:new-report' object.slug %}" class="text-black-50"><small>Report tribute</small></a></p>
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <a href="{% url 'tributes:new-report' object.slug %}" class="text-black-50"><small>Report this tribute</small></a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{% url 'tributes:home' %}" class="text-black-50"><small>Create a tribute</small></a>
+        </li>
+    </ul>
 </div>
 
 {% endblock %}

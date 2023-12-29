@@ -25,36 +25,38 @@
         </ul>
     </div>
 {% endif %}
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'tributes:home' %}">EasyTribute</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'tributes:dashboard' %}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'magic_links:logout' %}">
-                            {% csrf_token %}
-                            <input class="nav-link" type="submit" value="Sign out">
-                        </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'magic_links:login' %}">Sign In</a>
-                    </li>
-                {% endif %}
-            </ul>
+{% if not hide_navbar %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'tributes:home' %}">EasyTribute</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{% url 'tributes:dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'magic_links:logout' %}">
+                                {% csrf_token %}
+                                <input class="nav-link" type="submit" value="Sign out">
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{% url 'magic_links:login' %}">Sign In</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+{% endif %}
 <div class="container py-5">
     {% block content %}
         <h1>This text will be replaced</h1>
