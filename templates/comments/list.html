@@ -11,13 +11,14 @@
                 </p>
             </div>
         </article>
-        {% if is_owner_authenticated %}
-            <div class="mt-n4">
-                <p class="small text-right">
-                    <a class="text-secondary" href="{% url 'comments-delete' el.pk%}">Delete comment</a>
-                </p>
-            </div>
-        {% endif %}
+        <div class="mt-n4">
+            <p class="small text-right">
+                <a class="text-secondary" href="{% url 'comments-flag' el.pk %}">Report</a>
+                {% if is_owner_authenticated %}
+                    <a class="text-secondary" href="{% url 'comments-delete' el.pk%}">Delete</a>
+                {% endif %}
+            </p>
+        </div>
     {% empty %}
     <article id="no-comments" class="text-center pb-5">
         <p>No comments yet.</p>
