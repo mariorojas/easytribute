@@ -11,5 +11,6 @@ urlpatterns = [
     path('new/', views.TributeCreateView.as_view(), name='new'),
     path('new/anon/', views.TributeCreateAnonymousView.as_view(), name='new-as-anon'),
     path('<slug:slug>/', views.TributeDetailView.as_view(), name='detail'),
+    path('<slug:slug>/report/', views.ReportCreateView.as_view(), name='new-report'),
     path('<slug:slug>/share/', views.TributeShareView.as_view(), name='share'),
 ]

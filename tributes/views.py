@@ -1,10 +1,34 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
-from .forms import AnonymousTributeForm, NewTributeForm, TributeForm
-from .models import Tribute
+from .forms import AnonymousTributeForm, NewTributeForm, ReportForm, TributeForm
+from .models import Report, Tribute
+
+
+class ReportCreateView(CreateView):
+    model = Report
+    form_class = ReportForm
+    object = None
+    tribute = None
+
+    def get(self, request, *args, **kwargs):
+        self.tribute = self.get_tribute()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.tribute = self.get_tribute()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.tribute = self.tribute
+        self.object = form.save()
+        return render(self.request, 'tributes/report_completed.html')
+
+    def get_tribute(self):
+        slug = self.kwargs.get('slug')
+        return Tribute.objects.get(active=True, slug=slug)
 
 
 class TributeCreateAnonymousView(CreateView):

@@ -36,4 +36,8 @@
         <p class="text-center text-secondary"><em>The owner is not allowed to comment on their own tribute.</em></p>
     {% endif %}
 </div>
+<div id="tribute-options" class="mt-5">
+    <p><a href="{% url 'tributes:new-report' object.slug %}" class="text-black-50"><small>Report tribute</small></a></p>
+</div>
+
 {% endblock %}

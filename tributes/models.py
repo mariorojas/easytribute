@@ -28,6 +28,18 @@ class Tribute(models.Model):
         return reverse('tributes:detail', kwargs={'slug': self.slug})
 
 
+class ReportManager(models.Manager):
+    pass
+
+
+class Report(models.Model):
+    tribute = models.ForeignKey(Tribute, on_delete=models.CASCADE)
+    detail = models.TextField(max_length=3000, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = ReportManager()
+
+
 class TributeModerator(CommentModerator):
     email_notification = False
     enable_field = 'enable_comments'
