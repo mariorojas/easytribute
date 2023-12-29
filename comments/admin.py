@@ -13,10 +13,20 @@ class CustomCommentAdmin(CommentsAdmin):
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    readonly_fields = ['comment_link']
+    list_display = ['report', 'flag_date', 'is_removed']
+    readonly_fields = ['comment_link', 'is_removed']
 
+    @admin.display()
     def comment_link(self, obj):
         return mark_safe('<a href="{}">{}</a>'.format(
             reverse('admin:comments_customcomment_change', args=(obj.comment.pk,)),
             obj.comment.pk
         ))
+
+    @admin.display(boolean=True)
+    def is_removed(self, ojb):
+        return ojb.comment.is_removed
+
+    @admin.display(description='Report')
+    def report(self, obj):
+        return obj
