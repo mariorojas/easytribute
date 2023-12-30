@@ -10,7 +10,6 @@ from .models import Report, Tribute
 class ReportCreateView(CreateView):
     model = Report
     form_class = ReportForm
-    object = None
     tribute = None
 
     def get(self, request, *args, **kwargs):
@@ -23,8 +22,9 @@ class ReportCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.tribute = self.tribute
-        self.object = form.save()
-        return render(self.request, 'tributes/report_completed.html')
+        context = self.get_context_data()
+        context.update({'object': form.instance})
+        return render(self.request, 'tributes/report_completed.html', context)
 
     def get_tribute(self):
         slug = self.kwargs.get('slug')
