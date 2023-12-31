@@ -13,8 +13,10 @@ from django_recaptcha.fields import ReCaptchaField
 from .models import Report, Tribute
 from .utils import restricted_slugs
 
-USER_COMMENT = ('On behalf EasyTribute, we extend our sincere condolences. '
-                'May fond memories bring comfort during this time.')
+USER_COMMENT = (
+    'On behalf EasyTribute, we extend our sincere condolences. '
+    'May fond memories bring comfort during this time.'
+)
 USER_EMAIL = 'support@easytribute.com'
 USER_NAME = 'EasyTribute team'
 
@@ -22,8 +24,10 @@ USER_NAME = 'EasyTribute team'
 class ReportForm(forms.ModelForm):
     detail = forms.CharField(
         max_length=3000,
-        help_text=('Please provide details that will assist us '
-                   'in taking action on your report.'),
+        help_text=(
+            'Please provide details that will assist us '
+            'in taking action on your report.'
+        ),
         widget=forms.Textarea(attrs={'cols': 40, 'rows': 10}),
     )
     captcha = ReCaptchaField()

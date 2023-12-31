@@ -1,10 +1,15 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import mixins
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
 from .forms import AnonymousTributeForm, TributeForm, ReportForm, UpdateTributeForm
 from .models import Report, Tribute
+
+
+class LoginRequiredMixin(mixins.LoginRequiredMixin):
+    def get_redirect_field_name(self):
+        return None
 
 
 class ReportCreateView(CreateView):
@@ -72,9 +77,6 @@ class TributeCreateView(LoginRequiredMixin, CreateView):
             return redirect('tributes:edit')
         return super().post(request, *args, **kwargs)
 
-    def get_redirect_field_name(self):
-        return None
-
     def has_tribute(self):
         return Tribute.objects.filter(owner=self.request.user).exists()
 
@@ -87,9 +89,6 @@ class TributeDashboardView(LoginRequiredMixin, TemplateView):
         object_ = Tribute.objects.filter(owner=self.request.user).first()
         context.update({'object': object_})
         return context
-
-    def get_redirect_field_name(self):
-        return None
 
 
 class TributeDetailView(DetailView):
@@ -128,15 +127,9 @@ class TributeShareView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return get_object_or_404(Tribute, owner=self.request.user)
 
-    def get_redirect_field_name(self):
-        return None
-
 
 class TributeUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UpdateTributeForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(Tribute, owner=self.request.user)
-
-    def get_redirect_field_name(self):
-        return None
