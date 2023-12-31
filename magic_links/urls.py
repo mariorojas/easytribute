@@ -10,4 +10,5 @@ urlpatterns = [
     path('auth/', sesame_views.LoginView.as_view(), name='auth'),
     path('login/', views.EmailLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('settings/', views.AccountSettingsView.as_view(), name='settings'),
 ]

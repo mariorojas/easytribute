@@ -2,13 +2,14 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 from sesame.utils import get_query_string
 
-from .forms import EmailLoginForm
+from .forms import AccountSettingsForm, EmailLoginForm
 
 MESSAGE = """Hi,
 
@@ -24,9 +25,26 @@ MODERATE_PERMISSION = 'can_moderate'
 PERMISSION = f'{MODERATE_APP}.{MODERATE_PERMISSION}'
 
 
-class AccountSettingsView(FormView):
+class AccountSettingsView(LoginRequiredMixin, FormView):
     template_name = 'magic_links/account_settings.html'
-    form_class = None
+    form_class = AccountSettingsForm
+    success_url = reverse_lazy('home')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.request.user
+        initial.update({
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        })
+        return initial
+    
+    def form_valid(self, form):
+        form.save(self.request.user)
+        return super().form_valid(form)
+
+    def get_redirect_field_name(self):
+        return None
 
 
 class EmailLoginView(FormView):

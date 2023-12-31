@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from tributes.views import TributeHomeView
+
 urlpatterns = [
+    path('', TributeHomeView.as_view(), name='home'),
     path('accounts/', include('magic_links.urls')),
     path('admin/', admin.site.urls),
     path('comments/', include('comments.urls')),

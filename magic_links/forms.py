@@ -5,6 +5,16 @@ from django.core.exceptions import ValidationError
 from . import blacklist
 
 
+class AccountSettingsForm(forms.Form):
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+
+    def save(self, user):
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.save()
+
+
 class EmailLoginForm(forms.Form):
     email = forms.EmailField()
 
