@@ -13,10 +13,10 @@ from django_recaptcha.fields import ReCaptchaField
 from .models import Report, Tribute
 from .utils import restricted_slugs
 
-user_comment = ('On behalf EasyTribute, we extend our sincere condolences. '
+USER_COMMENT = ('On behalf EasyTribute, we extend our sincere condolences. '
                 'May fond memories bring comfort during this time.')
-user_email = 'support@easytribute.com'
-user_name = 'EasyTribute team'
+USER_EMAIL = 'support@easytribute.com'
+USER_NAME = 'EasyTribute team'
 
 
 class ReportForm(forms.ModelForm):
@@ -71,9 +71,9 @@ class TributeForm(forms.ModelForm):
         custom_comment_model = apps.get_model('comments', 'CustomComment')
         comment = custom_comment_model(
             content_object=self.instance,
-            user_name=user_name,
-            user_email=user_email,
-            comment=user_comment,
+            user_name=USER_NAME,
+            user_email=USER_EMAIL,
+            comment=USER_COMMENT,
             is_public=True,
             ip_address=ip_address,
             site_id=site_id
@@ -121,13 +121,6 @@ class UpdateTributeForm(TributeForm):
             Div('name', 'description', 'birth_year', 'death_year', slug_field),
             Submit('submit', 'Save changes', css_class='btn btn-dark'),
         )
-
-    def clean_death_year(self):
-        birth_year = self.cleaned_data.get('birth_year')
-        death_year = self.cleaned_data.get('death_year')
-        if birth_year and birth_year > death_year:
-            raise ValidationError('The death year cannot be lower than the birth year')
-        return death_year
 
     def clean_slug(self):
         slug = self.cleaned_data.get('slug')

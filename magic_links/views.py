@@ -10,7 +10,7 @@ from sesame.utils import get_query_string
 
 from .forms import EmailLoginForm
 
-message = """Hi,
+MESSAGE = """Hi,
 
 Sign in to EasyTribute by clicking on the following link:
 
@@ -18,6 +18,10 @@ Sign in to EasyTribute by clicking on the following link:
 
 If you did not request this email, you can safely ignore it.
 """
+
+MODERATE_APP = 'django_comments'
+MODERATE_PERMISSION = 'can_moderate'
+PERMISSION = f'{MODERATE_APP}.{MODERATE_PERMISSION}'
 
 
 class EmailLoginView(FormView):
@@ -28,18 +32,20 @@ class EmailLoginView(FormView):
         email = form.cleaned_data.get('email')
 
         user_model = get_user_model()
-        try:
-            user = user_model.objects.get(username=email)
-        except user_model.DoesNotExist:
+        user = user_model.objects.filter(username=email).first()
+
+        if not user:
             raw_password = str(uuid.uuid4())
             user = user_model.objects.create_user(
-                username=email, email=email, password=raw_password
+                username=email,
+                email=email,
+                password=raw_password,
             )
 
-            # enable comments moderation by tribute owner
+        if not user.has_perm(PERMISSION):
             permission = Permission.objects.get_by_natural_key(
-                codename='can_moderate',
-                app_label='django_comments',
+                codename=MODERATE_PERMISSION,
+                app_label=MODERATE_APP,
                 model='comment',
             )
             user.user_permissions.add(permission)
@@ -49,7 +55,7 @@ class EmailLoginView(FormView):
 
         user.email_user(
             subject='Sign In to EasyTribute',
-            message=message.format(link),
+            message=MESSAGE.format(link),
             from_email=settings.EMAIL_HOST_USER,
         )
 
