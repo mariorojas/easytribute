@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # project apps
     'comments.apps.CommentsConfig',
     'magic_links.apps.MagicLinksConfig',
+    'mgt.apps.MgtConfig',
     'tributes.apps.TributesConfig',
 ]
 
