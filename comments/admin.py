@@ -18,10 +18,12 @@ class ReportAdmin(admin.ModelAdmin):
 
     @admin.display()
     def comment_link(self, obj):
-        return mark_safe('<a href="{}">{}</a>'.format(
-            reverse('admin:comments_customcomment_change', args=(obj.comment.pk,)),
-            obj.comment.pk
-        ))
+        change_comment_link = reverse(
+            viewname='admin:comments_customcomment_change',
+            args=[obj.comment.pk],
+        )
+        link = '<a href="{}">{}</a>'.format(change_comment_link, obj.comment.pk)
+        return mark_safe(link)
 
     @admin.display(boolean=True)
     def is_removed(self, ojb):

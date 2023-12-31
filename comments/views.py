@@ -16,43 +16,47 @@ from comments.models import Report
 @login_required
 @permission_required("django_comments.can_moderate", raise_exception=True)
 def delete(request, comment_id, next=None):
-    comment = get_object_or_404(django_comments.get_model(),
-                                pk=comment_id,
-                                site__pk=get_current_site(request).pk)
+    comment = get_object_or_404(
+        django_comments.get_model(),
+        pk=comment_id,
+        site__pk=get_current_site(request).pk,
+    )
+
     owner = comment.content_object.owner
     if request.user.username != owner:
         raise PermissionDenied()
+
     return moderation.delete(request, comment_id, next)
 
 
 @csrf_protect
 def flag(request, comment_id, next=None):
-    comment = get_object_or_404(django_comments.get_model(),
-                                pk=comment_id,
-                                site__pk=get_current_site(request).pk)
+    comment = get_object_or_404(
+        django_comments.get_model(),
+        pk=comment_id,
+        site__pk=get_current_site(request).pk,
+    )
 
     if request.method == 'POST':
         perform_flag(request, comment)
-        return next_redirect(request, fallback=next or 'comments-flag-done',
-                             c=comment.pk)
+        fallback = next or 'comments-flag-done'
+        return next_redirect(request, fallback=fallback, c=comment.pk)
 
-    else:
-        return render(request, 'comments/flag.html', {'comment': comment, "next": next})
+    return render(request, 'comments/flag.html', {'comment': comment, "next": next})
 
 
 def perform_flag(request, comment):
-    _flag, created = Report.objects.get_or_create(
-        comment=comment,
-        flag=Report.SUGGEST_REMOVAL
+    flag_, created = Report.objects.get_or_create(
+        comment=comment, flag=Report.SUGGEST_REMOVAL
     )
 
-    print(f'Comment {comment.pk} was flagged by anon user at {_flag.flag_date}')
+    print(f'Comment {comment.pk} was flagged by anon user at {flag_.flag_date}')
 
     if created:
         signals.comment_was_flagged.send(
             sender=comment.__class__,
             comment=comment,
-            flag=_flag,
+            flag=flag_,
             created=created,
             request=request,
         )

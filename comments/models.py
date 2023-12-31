@@ -13,18 +13,18 @@ class ReportManager(models.Manager):
 
 
 class Report(models.Model):
+    SUGGEST_REMOVAL = 'removal suggestion'
+    MODERATOR_DELETION = 'moderator deletion'
+    MODERATOR_APPROVAL = 'moderator approval'
+
     comment = models.ForeignKey(
         Comment, verbose_name='comment', related_name='reports',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     flag = models.CharField(max_length=30, db_index=True)
     flag_date = models.DateTimeField(default=None)
 
     objects = ReportManager()
-
-    SUGGEST_REMOVAL = 'removal suggestion'
-    MODERATOR_DELETION = 'moderator deletion'
-    MODERATOR_APPROVAL = 'moderator approval'
 
     class Meta:
         unique_together = [('comment', 'flag')]

@@ -32,22 +32,25 @@ class EmailLoginView(FormView):
             user = user_model.objects.get(username=email)
         except user_model.DoesNotExist:
             raw_password = str(uuid.uuid4())
-            user = user_model.objects.create_user(username=email, email=email,
-                                                  password=raw_password)
+            user = user_model.objects.create_user(
+                username=email, email=email, password=raw_password
+            )
 
             # enable comments moderation by tribute owner
             permission = Permission.objects.get_by_natural_key(
                 codename='can_moderate',
                 app_label='django_comments',
-                model='comment')
+                model='comment',
+            )
             user.user_permissions.add(permission)
 
-        link = reverse('magic_links:auth')
-        link = self.request.build_absolute_uri(link)
+        link = self.request.build_absolute_uri(reverse('magic_links:auth'))
         link += get_query_string(user)
 
-        user.email_user(subject='Sign In to EasyTribute',
-                        message=message.format(link),
-                        from_email=settings.EMAIL_HOST_USER)
+        user.email_user(
+            subject='Sign In to EasyTribute',
+            message=message.format(link),
+            from_email=settings.EMAIL_HOST_USER,
+        )
 
         return render(self.request, 'magic_links/email_login_success.html')

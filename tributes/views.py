@@ -3,7 +3,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
-from .forms import AnonymousTributeForm, NewTributeForm, ReportForm, TributeForm
+from .forms import AnonymousTributeForm, TributeForm, ReportForm, UpdateTributeForm
 from .models import Report, Tribute
 
 
@@ -31,7 +31,7 @@ class ReportCreateView(CreateView):
         return Tribute.objects.get(active=True, slug=slug)
 
 
-class TributeCreateAnonymousView(CreateView):
+class AnonymousTributeCreateView(CreateView):
     model = Tribute
     form_class = AnonymousTributeForm
     object = None
@@ -40,20 +40,26 @@ class TributeCreateAnonymousView(CreateView):
         site = get_current_site(self.request)
         ip_address = self.request.META.get('REMOTE_ADDR', None)
         self.object = form.save_with_comments(
-            user=self.request.user, site_id=site.id, ip_address=ip_address)
+            user=self.request.user,
+            site_id=site.id,
+            ip_address=ip_address,
+        )
         return redirect(self.object.get_absolute_url())
 
 
 class TributeCreateView(LoginRequiredMixin, CreateView):
     model = Tribute
-    form_class = NewTributeForm
+    form_class = TributeForm
     object = None
 
     def form_valid(self, form):
         site = get_current_site(self.request)
         ip_address = self.request.META.get('REMOTE_ADDR', None)
         self.object = form.save_with_comments(
-            user=self.request.user, site_id=site.id, ip_address=ip_address)
+            user=self.request.user,
+            site_id=site.id,
+            ip_address=ip_address,
+        )
         return redirect(self.object.get_absolute_url())
 
     def get(self, request, *args, **kwargs):
@@ -78,8 +84,8 @@ class TributeDashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        _object = Tribute.objects.filter(owner=self.request.user).first()
-        context.update({'object': _object})
+        object_ = Tribute.objects.filter(owner=self.request.user).first()
+        context.update({'object': object_})
         return context
 
     def get_redirect_field_name(self):
@@ -92,12 +98,11 @@ class TributeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update({'hide_navbar': True})
 
         # enable comment moderation for owner
         user = self.request.user
         context.update({'is_owner_authenticated': user.username == self.object.owner})
-
-        context.update({'hide_navbar': Tribute})
 
         return context
 
@@ -112,9 +117,8 @@ class TributeHomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'latest': Tribute.objects.filter(active=True).order_by('-created_at')[:5]
-        })
+        latest = Tribute.objects.filter(active=True).order_by('-created_at')[:5]
+        context.update({'latest': latest})
         return context
 
 
@@ -129,7 +133,7 @@ class TributeShareView(LoginRequiredMixin, DetailView):
 
 
 class TributeUpdateView(LoginRequiredMixin, UpdateView):
-    form_class = TributeForm
+    form_class = UpdateTributeForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(Tribute, owner=self.request.user)
