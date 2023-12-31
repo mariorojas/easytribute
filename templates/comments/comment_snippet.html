@@ -1,0 +1,11 @@
+<article id="c{{ comment.pk }}" class="border rounded bg-white row mb-4 p-3">
+    <div class="col-1">
+        <span class="h3">🕊️</span>
+    </div>
+    <div class="col">
+        {{ comment.comment | linebreaks }}
+        <p class="mt-n3 mb-0 {{ comment.user | yesno:'text-success,text-secondary'}}">
+            <small>{{ comment.name }}{% if comment.is_owner_comment %} <span class="text-secondary">(owner)</span>{% endif %}</small>
+        </p>
+    </div>
+</article>

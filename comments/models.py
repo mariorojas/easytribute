@@ -7,6 +7,12 @@ class CustomComment(Comment):
     class Meta(Comment.Meta):
         ordering = ('-submit_date',)
 
+    @property
+    def is_owner_comment(self):
+        if self.user:
+            return self.user.username == self.content_object.owner
+        return False
+
 
 class ReportManager(models.Manager):
     pass

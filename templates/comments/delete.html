@@ -5,18 +5,8 @@
 {% block content %}
 
 <h1 class="border-bottom pb-2 mb-5">Really remove this comment?</h1>
-<article id="c{{ el.pk }}" class="border rounded bg-white row mb-4 p-3">
-    <div class="col-1">
-        <span class="h3">🕊️</span>
-    </div>
-    <div class="col">
-        {{ comment.comment | linebreaks }}
-        <p class="text-secondary mt-n3 mb-0">
-            <small>{{ comment.name }}</small>
-        </p>
-    </div>
-</article>
-<form action="." method="post">{% csrf_token %}
+{% include 'comments/comment_snippet.html' with comment=comment %}
+<form action="{% url 'comments-delete' comment.pk %}" method="post">{% csrf_token %}
     {% if next %}
         <div><input type="hidden" name="next" value="{{ next }}" id="next"/></div>
     {% endif %}
