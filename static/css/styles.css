@@ -12601,4 +12601,8 @@ textarea.form-control-lg {
   display: none;
 }
 
+form.authenticated #div_id_name, form.authenticated #div_id_email {
+  display: none;
+}
+
 /*# sourceMappingURL=styles.css.map */

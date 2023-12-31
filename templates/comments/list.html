@@ -6,9 +6,7 @@
             </div>
             <div class="col">
                 {{ el.comment | linebreaks }}
-                <p class="text-secondary mt-n3 mb-0">
-                    <small>{{ el.name }}</small>
-                </p>
+                <p class="mt-n3 mb-0 {{ el.user | yesno:'text-success,text-secondary'}}"><small>{{ el.name }}</small></p>
             </div>
         </article>
         <div class="mt-n4">

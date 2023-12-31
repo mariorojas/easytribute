@@ -24,6 +24,11 @@ MODERATE_PERMISSION = 'can_moderate'
 PERMISSION = f'{MODERATE_APP}.{MODERATE_PERMISSION}'
 
 
+class AccountSettingsView(FormView):
+    template_name = 'magic_links/account_settings.html'
+    form_class = None
+
+
 class EmailLoginView(FormView):
     template_name = 'magic_links/email_login.html'
     form_class = EmailLoginForm
@@ -36,10 +41,13 @@ class EmailLoginView(FormView):
 
         if not user:
             raw_password = str(uuid.uuid4())
+            random_str = str(uuid.uuid4())[:6]
             user = user_model.objects.create_user(
                 username=email,
                 email=email,
                 password=raw_password,
+                first_name='User',
+                last_name=random_str
             )
 
         if not user.has_perm(PERMISSION):

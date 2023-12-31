@@ -29,12 +29,8 @@
     {% render_comment_list for object %}
     <div  class="mt-5">&nbsp;</div>
     <div  class="mt-5">&nbsp;</div>
-    {% if not is_owner_authenticated %}
-        <h3 class="border-bottom pb-2 mt-5 h5">Send your comment</h3>
-        {% render_comment_form for object %}
-    {% else %}
-        <p class="text-center text-secondary"><em>The owner is not allowed to comment on their own tribute.</em></p>
-    {% endif %}
+    <h3 class="border-bottom pb-2 mt-5 mb-3 h5">Send your comment</h3>
+    {% render_comment_form for object %}
 </div>
 <div id="tribute-options" class="mt-5">
     <ul class="list-inline">

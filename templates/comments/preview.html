@@ -7,12 +7,12 @@
 
 {% block content %}
 
-<form action="{% comment_form_target %}" method="post">{% csrf_token %}
+<form action="{% comment_form_target %}" method="post" class="{{ user.is_authenticated | yesno:'authenticated,anonymous' }}">{% csrf_token %}
     {% if not form.erros%}
         <div id="comment-preview">
             <h1 class="border-bottom pb-2 mb-5">Preview your comment</h1>
             <p>Here's what your comment will look like; if you're happy with it, go ahead and post, or feel free to edit and preview again.</p>
-            <article id="c{{ comment.pk }}" class="border rounded bg-secondary-subtle row mb-4 p-3">
+            <article class="border rounded bg-secondary-subtle row mb-4 p-3">
                 <div class="col-1">
                     <span class="h3">🕊️</span>
                 </div>

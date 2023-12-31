@@ -29,3 +29,9 @@ $enable-negative-margins: true;
 #div_id_honeypot, #div_id_url {
     display: none;
 }
+
+form.authenticated {
+    #div_id_name, #div_id_email {
+        display: none;
+    }
+}
