@@ -14,4 +14,4 @@ runserver:
 	python manage.py runserver
 
 sass-watch:
-	sass --watch ./scss/styles.scss ./static/css/styles.css
+	sass --watch ./scss/styles.scss ./static/css/styles.css --style compressed
