@@ -1,6 +1,5 @@
 .env
 *.sqlite*
-static/css/styles.css*
 
 .idea/
 .sass_cache/
