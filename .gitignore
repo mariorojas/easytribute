@@ -1,10 +1,10 @@
 .env
 *.sqlite*
+static/css/styles.css*
 
 .idea/
+.sass_cache/
 __pycache__/
 node_modules/
 staticfiles/
 venv/
-
-static/css/styles.css*
