@@ -3,12 +3,22 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_POST
 from django_comments import signals, get_model
 
-from django_comments.views import moderation
+from django_comments.views import comments, moderation
 from django_comments.views.utils import next_redirect
 
 from comments.models import Report
+
+
+@csrf_protect
+@require_POST
+def post_comment(request, next=None, using=None):
+    real_ip = request.META.get('HTTP_X_REAL_IP', None)
+    if real_ip:
+        request.META['REMOTE_ADDR'] = real_ip
+    return comments.post_comment(request, next, using)
 
 
 @csrf_protect

@@ -43,13 +43,17 @@ class AnonymousTributeCreateView(CreateView):
 
     def form_valid(self, form):
         site = get_current_site(self.request)
-        ip_address = self.request.META.get('REMOTE_ADDR', None)
         self.object = form.save_with_comments(
             user=self.request.user,
             site_id=site.id,
-            ip_address=ip_address,
+            ip_address=self.get_ip_address(),
         )
         return redirect(self.object.get_absolute_url())
+
+    def get_ip_address(self):
+        real_ip = self.request.META.get('HTTP_X_REAL_IP', None)
+        remote_addr = self.request.META.get('REMOTE_ADDR', None)
+        return real_ip or remote_addr
 
 
 class TributeCreateView(LoginRequiredMixin, CreateView):
@@ -59,11 +63,10 @@ class TributeCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         site = get_current_site(self.request)
-        ip_address = self.request.META.get('REMOTE_ADDR', None)
         self.object = form.save_with_comments(
             user=self.request.user,
             site_id=site.id,
-            ip_address=ip_address,
+            ip_address=self.get_ip_address(),
         )
         return redirect(self.object.get_absolute_url())
 
@@ -76,6 +79,11 @@ class TributeCreateView(LoginRequiredMixin, CreateView):
         if self.has_tribute():
             return redirect('tributes:edit')
         return super().post(request, *args, **kwargs)
+
+    def get_ip_address(self):
+        real_ip = self.request.META.get('HTTP_X_REAL_IP', None)
+        remote_addr = self.request.META.get('REMOTE_ADDR', None)
+        return real_ip or remote_addr
 
     def has_tribute(self):
         return Tribute.objects.filter(owner=self.request.user).exists()
