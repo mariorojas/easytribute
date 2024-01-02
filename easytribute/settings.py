@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'comments.apps.CommentsConfig',
     'magic_links.apps.MagicLinksConfig',
     'mgt.apps.MgtConfig',
+    'tobruno.apps.TobrunoConfig',
     'tributes.apps.TributesConfig',
 ]
 

@@ -209,4 +209,5 @@ restricted_slugs = [
     'antonio',
     'accounts',
     'sesame',
+    'to-bruno',
 ]

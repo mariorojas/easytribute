@@ -25,5 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('comments/', include('comments.urls')),
     path('comments/', include('django_comments.urls')),
+    path('to-bruno', include('tobruno.urls')),
     path('', include('tributes.urls')),
 ]
