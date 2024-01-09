@@ -105,6 +105,12 @@ class TributeDetailView(DetailView):
 class TributeHomeView(TemplateView):
     template_name = 'tributes/tribute_home.html'
 
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('tributes:dashboard')
+        return super().get(request, *args, **kwargs)
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         latest = Tribute.objects.filter(active=True).order_by('-created_at')[:5]
