@@ -5,19 +5,21 @@
 {% block content %}
 
 <h1 class="border-bottom pb-2 mb-5">Dashboard</h1>
-<div id="account-settings" class="border-bottom pb-2">
+<div id="account-settings">
     <p>You're logged as <span class="fw-bold">{{ user.username }}</span></p>
     <p>You'll comment as  <span class="fw-bold">{{ user.first_name }} {{ user.last_name }}</span></p>
     <p><a href="{% url 'magic_links:settings' %}">Account settings</a></p>
 </div>
+
+<h2 class="border-bottom pb-2 mt-5">Tributes</h2>
 <div id="tribute-settings" class="pt-3">
-    {% if object %}
-        <p><a href="{% url 'tributes:edit' %}">Edit your tribute</a></p>
-        <p><a href="{% url 'tributes:detail' object.slug %}">Check your tribute</a></p>
-        <p><a href="{% url 'tributes:share' object.slug %}">Share your tribute</a></p>
-    {% else %}
-        <p><a href="{% url 'tributes:new' %}">New tribute</a></p>
-    {% endif %}
+    {% for object in object_list %}
+        <p class="fw-bold">{{ object.name }}</p>
+        <p class="ps-4"><a href="{% url 'tributes:edit' object.slug %}">Edit your tribute</a></p>
+        <p class="ps-4"><a href="{% url 'tributes:detail' object.slug %}">Check your tribute</a></p>
+        <p class="ps-4"><a href="{% url 'tributes:share' object.slug %}">Share your tribute</a></p>
+    {% endfor %}
+    <p><a href="{% url 'tributes:new' %}">New tribute</a></p>
 </div>
 
 {% endblock %}

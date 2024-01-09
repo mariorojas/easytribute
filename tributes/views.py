@@ -1,6 +1,6 @@
 from django.contrib.auth import mixins
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, render
 from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
 from .forms import AnonymousTributeForm, TributeForm, ReportForm, UpdateTributeForm
@@ -70,23 +70,10 @@ class TributeCreateView(LoginRequiredMixin, CreateView):
         )
         return redirect(self.object.get_absolute_url())
 
-    def get(self, request, *args, **kwargs):
-        if self.has_tribute():
-            return redirect('tributes:edit')
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        if self.has_tribute():
-            return redirect('tributes:edit')
-        return super().post(request, *args, **kwargs)
-
     def get_ip_address(self):
         real_ip = self.request.META.get('HTTP_X_REAL_IP', None)
         remote_addr = self.request.META.get('REMOTE_ADDR', None)
         return real_ip or remote_addr
-
-    def has_tribute(self):
-        return Tribute.objects.filter(owner=self.request.user).exists()
 
 
 class TributeDashboardView(LoginRequiredMixin, TemplateView):
@@ -94,8 +81,8 @@ class TributeDashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        object_ = Tribute.objects.filter(owner=self.request.user).first()
-        context.update({'object': object_})
+        object_list = Tribute.objects.filter(owner=self.request.user)
+        context.update({'object_list': object_list})
         return context
 
 
@@ -105,7 +92,9 @@ class TributeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'hide_navbar': True})
+
+        if not self.request.user.is_authenticated:
+            context.update({'hide_navbar': True})
 
         # enable comment moderation for owner
         user = self.request.user
@@ -132,12 +121,12 @@ class TributeHomeView(TemplateView):
 class TributeShareView(LoginRequiredMixin, DetailView):
     template_name = 'tributes/tribute_share.html'
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(Tribute, owner=self.request.user)
+    def get_queryset(self):
+        return Tribute.objects.filter(owner=self.request.user)
 
 
 class TributeUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UpdateTributeForm
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(Tribute, owner=self.request.user)
+    def get_queryset(self):
+        return Tribute.objects.filter(owner=self.request.user)
