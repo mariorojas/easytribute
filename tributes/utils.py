@@ -210,4 +210,6 @@ restricted_slugs = [
     'accounts',
     'sesame',
     'to-bruno',
+    'memorial',
+    'memorials',
 ]
