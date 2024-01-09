@@ -44,7 +44,6 @@ class AnonymousTributeCreateView(CreateView):
     def form_valid(self, form):
         site = get_current_site(self.request)
         self.object = form.save_with_comments(
-            user=self.request.user,
             site_id=site.id,
             ip_address=self.get_ip_address(),
         )
@@ -105,11 +104,6 @@ class TributeDetailView(DetailView):
 
 class TributeHomeView(TemplateView):
     template_name = 'tributes/tribute_home.html'
-
-    def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('tributes:dashboard')
-        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

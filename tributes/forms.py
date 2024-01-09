@@ -17,7 +17,7 @@ USER_COMMENT = (
     'On behalf EasyTribute, we extend our sincere condolences. '
     'May fond memories bring comfort during this time.'
 )
-USER_EMAIL = 'support@easytribute.com'
+USER_EMAIL = 'hello@easytribute.com'
 USER_NAME = 'EasyTribute team'
 
 
@@ -50,7 +50,7 @@ class TributeForm(forms.ModelForm):
             Submit('submit', 'Create', css_class='btn btn-dark'),
         )
 
-    def save_with_comments(self, user, site_id, ip_address):
+    def save_with_comments(self, user=None, site_id=None, ip_address=None):
         create_slug = True
         while create_slug:
             slug = ''.join([random.choice(string.ascii_lowercase) for _ in range(6)])
@@ -63,7 +63,7 @@ class TributeForm(forms.ModelForm):
 
             self.instance.slug = slug
 
-            if user.is_authenticated:
+            if user and user.is_authenticated:
                 self.instance.owner = user
 
             create_slug = False
