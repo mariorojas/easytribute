@@ -10,7 +10,7 @@ install:
 	python manage.py loaddata fixtures/easytribute.json
 	python manage.py createsuperuser
 
-runserver:
+run:
 	python manage.py runserver
 
 sass-watch:
