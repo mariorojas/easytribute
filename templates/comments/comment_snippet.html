@@ -4,8 +4,15 @@
     </div>
     <div class="col">
         {{ comment.comment | linebreaks }}
-        <p class="mt-n3 mb-0 {{ comment.user | yesno:'text-success,text-secondary'}}">
-            <small>{{ comment.name }}{% if comment.is_owner_comment %} <span class="text-secondary">(owner)</span>{% endif %}</small>
+        <p class="mt-n3 mb-0 text-secondary }}">
+            <small>
+                {% if comment.user %}
+                    <a class="text-success text-decoration-none" href="{% url 'magic_links:detail' comment.user.pk %}">{{ comment.name }}</a>
+                {% else %}
+                    {{ comment.name }}
+                {% endif %}
+                {% if comment.is_owner_comment %} <span class="text-secondary">(owner)</span>{% endif %}
+            </small>
         </p>
     </div>
 </article>

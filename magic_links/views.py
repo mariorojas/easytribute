@@ -1,12 +1,13 @@
 import uuid
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView, TemplateView
 from sesame.utils import get_query_string
 
 from .forms import AccountSettingsForm, EmailLoginForm
@@ -38,13 +39,29 @@ class AccountSettingsView(LoginRequiredMixin, FormView):
             'last_name': user.last_name,
         })
         return initial
-    
+
     def form_valid(self, form):
         form.save(self.request.user)
         return super().form_valid(form)
 
     def get_redirect_field_name(self):
         return None
+
+
+class AccountDetailView(TemplateView):
+    template_name = 'magic_links/account_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        pk = self.kwargs.get('pk')
+        user = get_object_or_404(get_user_model(), pk=pk, is_staff=False)
+
+        child_model = apps.get_model('tributes', 'Tribute')
+        tributes = child_model.objects.filter(owner=user.username)
+
+        context.update({'object': user, 'tributes': tributes})
+        return context
 
 
 class EmailLoginView(FormView):
