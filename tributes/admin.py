@@ -20,4 +20,4 @@ class ReportAdmin(admin.ModelAdmin):
 
 @admin.register(Tribute)
 class TributeAdmin(admin.ModelAdmin):
-    list_display = ['slug', 'pk', 'name', 'owner', 'active']
+    list_display = ['slug', 'pk', 'name', 'owner', 'picture', 'active']

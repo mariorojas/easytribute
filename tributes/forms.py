@@ -1,5 +1,6 @@
 import random
 import string
+import uuid
 
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
@@ -8,10 +9,14 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+from django.utils.translation import gettext as _
 from django_recaptcha.fields import ReCaptchaField
 
 from .models import Report, Tribute
 from .utils import restricted_slugs
+
+MAX_PICTURE_SIZE = 5 * 1024 * 1024
 
 USER_COMMENT = (
     'On behalf EasyTribute, we extend our sincere condolences. '
@@ -131,3 +136,15 @@ class UpdateTributeForm(TributeForm):
         if slug in restricted_slugs:
             raise ValidationError('%(value)s is not allowed', params={'value': slug})
         return slug
+
+
+class UpdateTributePictureForm(forms.ModelForm):
+    class Meta:
+        model = Tribute
+        fields = ['picture']
+
+    def clean_picture(self):
+        picture = self.cleaned_data.get('picture')
+        if picture.size > MAX_PICTURE_SIZE:
+            raise ValidationError(_('You cannot upload images larger than 5 MB.'))
+        return picture

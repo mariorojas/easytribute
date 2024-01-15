@@ -13,6 +13,8 @@
         {% with 'mj stevejobs kobe' as slugs %}
             {% if object.slug in slugs %}
                 <img class="thumbnail img-thumbnail rounded-circle d-block mx-auto mb-4" src="{% static 'img/' %}{{ object.slug }}.png">
+            {% elif object.picture %}
+                <img class="thumbnail img-thumbnail rounded-circle d-block mx-auto mb-4" src="/media/{{ object.picture }}">
             {% else %}
                 <img class="thumbnail img-thumbnail rounded-circle d-block mx-auto mb-4" src="{% static 'img/profile.png' %}">
             {% endif %}

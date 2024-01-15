@@ -1,9 +1,10 @@
 from django.contrib.auth import mixins
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, render
-from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
+from django.urls import reverse_lazy
+from django.views import generic
 
-from .forms import AnonymousTributeForm, TributeForm, ReportForm, UpdateTributeForm
+from . import forms
 from .models import Report, Tribute
 
 
@@ -12,9 +13,9 @@ class LoginRequiredMixin(mixins.LoginRequiredMixin):
         return None
 
 
-class ReportCreateView(CreateView):
+class ReportCreateView(generic.CreateView):
     model = Report
-    form_class = ReportForm
+    form_class = forms.ReportForm
     tribute = None
 
     def get(self, request, *args, **kwargs):
@@ -36,9 +37,9 @@ class ReportCreateView(CreateView):
         return Tribute.objects.get(active=True, slug=slug)
 
 
-class AnonymousTributeCreateView(CreateView):
+class AnonymousTributeCreateView(generic.CreateView):
     model = Tribute
-    form_class = AnonymousTributeForm
+    form_class = forms.AnonymousTributeForm
     object = None
 
     def form_valid(self, form):
@@ -55,9 +56,9 @@ class AnonymousTributeCreateView(CreateView):
         return real_ip or remote_addr
 
 
-class TributeCreateView(LoginRequiredMixin, CreateView):
+class TributeCreateView(LoginRequiredMixin, generic.CreateView):
     model = Tribute
-    form_class = TributeForm
+    form_class = forms.TributeForm
     object = None
 
     def form_valid(self, form):
@@ -75,7 +76,7 @@ class TributeCreateView(LoginRequiredMixin, CreateView):
         return real_ip or remote_addr
 
 
-class TributeDashboardView(LoginRequiredMixin, TemplateView):
+class TributeDashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'tributes/tribute_dashboard.html'
 
     def get_context_data(self, **kwargs):
@@ -85,7 +86,7 @@ class TributeDashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class TributeDetailView(DetailView):
+class TributeDetailView(generic.DetailView):
     def get_queryset(self):
         return Tribute.objects.filter(active=True)
 
@@ -102,7 +103,7 @@ class TributeDetailView(DetailView):
         return context
 
 
-class TributeHomeView(TemplateView):
+class TributeHomeView(generic.TemplateView):
     template_name = 'tributes/tribute_home.html'
 
     def get(self, request, *args, **kwargs):
@@ -117,15 +118,25 @@ class TributeHomeView(TemplateView):
         return context
 
 
-class TributeShareView(LoginRequiredMixin, DetailView):
+class TributePictureUpdateView(LoginRequiredMixin, generic.UpdateView):
+    form_class = forms.UpdateTributePictureForm
+    template_name = 'tributes/tribute_picture_form.html'
+    success_url = reverse_lazy('tributes:dashboard')
+    tribute = None
+
+    def get_queryset(self):
+        return Tribute.objects.filter(owner=self.request.user)
+
+
+class TributeShareView(LoginRequiredMixin, generic.DetailView):
     template_name = 'tributes/tribute_share.html'
 
     def get_queryset(self):
         return Tribute.objects.filter(owner=self.request.user)
 
 
-class TributeUpdateView(LoginRequiredMixin, UpdateView):
-    form_class = UpdateTributeForm
+class TributeUpdateView(LoginRequiredMixin, generic.UpdateView):
+    form_class = forms.UpdateTributeForm
 
     def get_queryset(self):
         return Tribute.objects.filter(owner=self.request.user)

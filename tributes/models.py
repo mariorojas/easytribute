@@ -1,5 +1,7 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django_comments.moderation import CommentModerator, moderator
 
 
@@ -13,6 +15,15 @@ class Tribute(models.Model):
     description = models.TextField(max_length=3000)
     birth_year = models.PositiveIntegerField()
     death_year = models.PositiveIntegerField()
+    picture = models.ImageField(
+        upload_to='pictures',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(['jpg', 'jpeg'])],
+        help_text=_(
+            'Images must be equal to or less than 5MB. Allowed file types: jpg, jpeg.'
+        ),
+    )
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

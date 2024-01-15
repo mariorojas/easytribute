@@ -208,3 +208,11 @@ if DEBUG:
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_USE_SSL = True
+
+# Media config
+
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT')
+MEDIA_URL = 'media/'
+
+if DEBUG:
+    MEDIA_ROOT = '/tmp/'

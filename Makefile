@@ -8,7 +8,10 @@ install:
 	pip install -r requirements.txt
 	python manage.py migrate
 	python manage.py loaddata fixtures/easytribute.json
-	python manage.py createsuperuser
+	python manage.py createsuperuser --user admin --email admin@example.com
+
+migrate:
+	python manage.py migrate
 
 run:
 	python manage.py runserver

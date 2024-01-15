@@ -30,6 +30,10 @@ $enable-negative-margins: true;
     display: none;
 }
 
+#div_id_picture .input-group {
+    display: none;
+}
+
 form.authenticated {
     #div_id_name, #div_id_email {
         display: none;

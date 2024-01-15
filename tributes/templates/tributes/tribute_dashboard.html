@@ -15,6 +15,7 @@
 <div id="tribute-settings" class="pt-3">
     {% for object in object_list %}
         <p class="fw-bold">{{ object.name }}</p>
+        <p class="ps-4"><a href="{% url 'tributes:edit-picture' object.slug %}">Update picture</a></p>
         <p class="ps-4"><a href="{% url 'tributes:edit' object.slug %}">Edit your tribute</a></p>
         <p class="ps-4"><a href="{% url 'tributes:detail' object.slug %}">Check your tribute</a></p>
         <p class="ps-4"><a href="{% url 'tributes:share' object.slug %}">Share your tribute</a></p>

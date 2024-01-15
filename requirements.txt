@@ -6,6 +6,7 @@ django-crispy-forms==2.1
 django-recaptcha==4.0.0
 django-sesame==3.2.2
 mysqlclient==2.2.0
+pillow==10.2.0
 python-dotenv==1.0.0
 sqlparse==0.4.4
 typing_extensions==4.9.0
