@@ -1,8 +1,16 @@
+import uuid
+
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_comments.moderation import CommentModerator, moderator
+
+
+def upload_to(instance, filename):
+    rnd = uuid.uuid4()
+    ext = filename.split('.')[-1]
+    return 'pictures/{}.{}'.format(rnd, ext)
 
 
 class TributeManager(models.Manager):
@@ -16,7 +24,7 @@ class Tribute(models.Model):
     birth_year = models.PositiveIntegerField()
     death_year = models.PositiveIntegerField()
     picture = models.ImageField(
-        upload_to='pictures',
+        upload_to=upload_to,
         blank=True,
         null=True,
         validators=[FileExtensionValidator(['jpg', 'jpeg'])],
