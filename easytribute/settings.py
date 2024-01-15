@@ -216,3 +216,7 @@ MEDIA_URL = 'media/'
 
 if DEBUG:
     MEDIA_ROOT = '/tmp/'
+
+# tinify
+
+TINIFY_API_KEY = os.environ.get('TINIFY_API_KEY')

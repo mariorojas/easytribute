@@ -1,7 +1,7 @@
 import random
 import string
-import uuid
 
+import tinify
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
@@ -9,7 +9,6 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 from django.utils.translation import gettext as _
 from django_recaptcha.fields import ReCaptchaField
 
@@ -24,6 +23,9 @@ USER_COMMENT = (
 )
 USER_EMAIL = 'hello@easytribute.com'
 USER_NAME = 'EasyTribute team'
+
+
+tinify.key = settings.TINIFY_API_KEY
 
 
 class ReportForm(forms.ModelForm):
@@ -142,6 +144,13 @@ class UpdateTributePictureForm(forms.ModelForm):
     class Meta:
         model = Tribute
         fields = ['picture']
+
+    def save(self, commit=True):
+        instance = super().save(commit)
+        source = tinify.from_file(instance.picture.path)
+        resized = source.resize(method='cover', width=220, height=220)
+        resized.to_file(instance.picture.path)
+        return instance
 
     def clean_picture(self):
         picture = self.cleaned_data.get('picture')
