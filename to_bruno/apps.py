@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TobrunoConfig(AppConfig):
+class ToBrunoConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'tobruno'
+    name = 'to_bruno'
