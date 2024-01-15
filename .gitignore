@@ -3,8 +3,9 @@
 *.sqlite*
 
 .idea/
-.sass_cache/
+.sass-cache/
 __pycache__/
+media/
 node_modules/
 staticfiles/
 venv/
