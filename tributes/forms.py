@@ -147,13 +147,15 @@ class UpdateTributePictureForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super().save(commit)
-        source = tinify.from_file(instance.picture.path)
-        resized = source.resize(method='cover', width=220, height=220)
-        resized.to_file(instance.picture.path)
+        picture = instance.picture
+        if picture:
+            source = tinify.from_file(picture.path)
+            resized = source.resize(method='cover', width=220, height=220)
+            resized.to_file(picture.path)
         return instance
 
     def clean_picture(self):
         picture = self.cleaned_data.get('picture')
-        if picture.size > MAX_PICTURE_SIZE:
+        if picture and picture.size > MAX_PICTURE_SIZE:
             raise ValidationError(_('You cannot upload images larger than 5 MB.'))
         return picture
