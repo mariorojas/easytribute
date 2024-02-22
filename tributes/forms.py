@@ -15,7 +15,7 @@ from django_recaptcha.fields import ReCaptchaField
 from .models import Report, Tribute
 from .utils import restricted_slugs
 
-MAX_PICTURE_SIZE = 5 * 1024 * 1024
+MAX_PICTURE_SIZE = 20 * 1024 * 1024
 
 USER_COMMENT = (
     'On behalf EasyTribute, we extend our sincere condolences. '
