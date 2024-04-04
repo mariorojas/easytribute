@@ -3,6 +3,7 @@
 {% block content %}
 
 <h1 class="border-bottom pb-2 mb-3">EasyTribute</h1>
+
 <p class="fs-4 mb-5">With Love and Ease: Create a tribute to remember.</p>
 <p><span class="fw-bold">EasyTribute</span> is a minimalist platform for creating online memorials quickly and easily in just three simple steps:</p>
 <ol>
@@ -10,15 +11,20 @@
     <li>Publish</li>
     <li>Share</li>
 </ol>
-<p>Take a look at the latest tributes created by our users:</p>
+
+<p class="fs-4 fw-bold mt-4">Start now!</p>
+<p>Create a tribute <a href="{% url 'tributes:new' %}">using your email</a> or do it <a href="{% url 'tributes:new-as-anon' %}">anonymously</a>.</p>
+<p><small class="text-secondary fst-italic">Anonymous tributes can only be managed by the Administrator.</small></p>
+
+<p class="mt-5">Take a look at the latest tributes created by our users:</p>
 <ul>
     {% for el in latest %}
         <li><a href="{% url 'tributes:detail' el.slug %}">{{ el.name }}</a></li>
     {% endfor %}
 </ul>
-<p>Create a tribute <a href="{% url 'tributes:new' %}">using your email</a> or do it <a href="{% url 'tributes:new-as-anon' %}">anonymously</a>.</p>
-<p><small class="text-secondary fst-italic">Anonymous tributes can only be managed by the Administrator.</small></p>
-<p><a href="https://github.com/mariorojas/easytribute">Check the source code here!</a></p>
+
+<p class="fw-bold mt-5">Completely open source!</p>
+<p><a href="https://github.com/mariorojas/easytribute">Check the source code here</a></p>
 <p><a class="text-secondary text-decoration-none" href="https://twitter.com/mariorojasmx"><small>by Mario Rojas</small></a></p>
 
 {% endblock%}
