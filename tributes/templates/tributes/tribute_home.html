@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<p class="mt-5">Take a look at the latest tributes created by our users:</p>
+<p class="fw-bold mt-5">Take a look at the latest tributes created by our users:</p>
 <ul>
     {% for el in latest %}
         <li><a href="{% url 'tributes:detail' el.slug %}">{{ el.name }}</a></li>
