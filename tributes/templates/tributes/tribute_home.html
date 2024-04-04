@@ -20,19 +20,19 @@
 
 <p class="fs-4 fw-bold mt-4">See how others celebrate:</p>
 <div class="row g-3">
-    <div class="col-6">
+    <div class="col-4">
+        <a href="{% url 'tributes:detail' 'kobe' %}">
+            <img class="img-fluid img-thumbnail" src="{% static 'img/preview-kb.jpg' %}">
+        </a>
+    </div>
+    <div class="col-4">
         <a href="{% url 'tributes:detail' 'mj' %}">
             <img class="img-fluid img-thumbnail" src="{% static 'img/preview-mj.jpg' %}">
         </a>
     </div>
-    <div class="col-6">
+    <div class="col-4">
         <a href="{% url 'tributes:detail' 'stevejobs' %}">
             <img class="img-fluid img-thumbnail" src="{% static 'img/preview-sj.jpg' %}">
-        </a>
-    </div>
-    <div class="col-6">
-        <a href="{% url 'tributes:detail' 'kobe' %}">
-            <img class="img-fluid img-thumbnail" src="{% static 'img/preview-kb.jpg' %}">
         </a>
     </div>
 </div>
