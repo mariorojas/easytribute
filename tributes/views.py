@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.contrib.auth import mixins
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 from django.views import generic
 
 from . import forms
@@ -37,10 +40,14 @@ class ReportCreateView(generic.CreateView):
         return Tribute.objects.get(active=True, slug=slug)
 
 
-class AnonymousTributeCreateView(generic.CreateView):
+class AnonymousTributeCreateView(SuccessMessageMixin, generic.CreateView):
     model = Tribute
     form_class = forms.AnonymousTributeForm
     object = None
+    success_message = _(
+        'Your tribute is ready. '
+        'Share it with loved ones using this link: '
+    )
 
     def form_valid(self, form):
         site = get_current_site(self.request)
@@ -48,12 +55,19 @@ class AnonymousTributeCreateView(generic.CreateView):
             site_id=site.id,
             ip_address=self.get_ip_address(),
         )
-        return redirect(self.object.get_absolute_url())
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
     def get_ip_address(self):
         real_ip = self.request.META.get('HTTP_X_REAL_IP', None)
         remote_addr = self.request.META.get('REMOTE_ADDR', None)
         return real_ip or remote_addr
+
+    def get_success_message(self, cleaned_data):
+        url = settings.BASE_SITE_URL + self.object.slug
+        return self.success_message + url
 
 
 class TributeCreateView(LoginRequiredMixin, generic.CreateView):

@@ -54,7 +54,7 @@ class TributeForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div('name', 'description', 'birth_year', 'death_year'),
-            Submit('submit', 'Create', css_class='btn btn-dark'),
+            Submit('submit', 'Publish', css_class='btn btn-dark'),
         )
 
     def save_with_comments(self, user=None, site_id=None, ip_address=None):
@@ -113,7 +113,7 @@ class AnonymousTributeForm(TributeForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div('name', 'description', 'birth_year', 'death_year', 'captcha'),
-            Submit('submit', 'Create', css_class='btn btn-dark'),
+            Submit('submit', 'Publish', css_class='btn btn-dark'),
         )
 
 

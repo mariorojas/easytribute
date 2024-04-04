@@ -18,11 +18,11 @@
 </head>
 <body class="bg-body-tertiary">
 {% if messages %}
-    <div>
-        <strong>Messages:</strong>
-        <ul>
-            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-        </ul>
+    <div class="alert alert-primary alert-dismissible fade show text-center rounded-0" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endif %}
 {% if not hide_navbar %}
