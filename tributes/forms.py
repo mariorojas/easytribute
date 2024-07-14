@@ -1,5 +1,6 @@
 import random
 import string
+from datetime import datetime
 
 import tinify
 from crispy_forms.bootstrap import PrependedText
@@ -98,6 +99,10 @@ class TributeForm(forms.ModelForm):
         death_year = self.cleaned_data.get('death_year')
         if birth_year and birth_year > death_year:
             raise ValidationError('The death year cannot be lower than the birth year')
+        current_year = datetime.now().year
+        if death_year > current_year:
+            raise ValidationError(
+                'The death year cannot be greater than the current year.')
         return death_year
 
 
