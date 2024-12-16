@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not IS_PYTHONANYWHERE
 
-ALLOWED_HOSTS = ['www.easytribute.com']
+ALLOWED_HOSTS = ['www.easytribute.com', 'easytribute.pythonanywhere.com']
 
 if DEBUG:
     ALLOWED_HOSTS = []
