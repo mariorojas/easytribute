@@ -18,3 +18,6 @@ run:
 
 sass-watch:
 	sass --watch ./scss/styles.scss ./static/css/styles.css --style compressed
+
+make workon-venv:
+	workon easytribute-virtualenv
